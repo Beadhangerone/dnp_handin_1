@@ -1,0 +1,32 @@
+@page "/family/{familyId}/edit"
+@using h1.Data
+@using global::Models
+@inject NavigationManager NavigationManager
+@inject IFamilyService FamilyServiceImpl
+
+<h3>FamilyEdit</h3>
+<p>id: @myFamily.Id</p>
+<p>Address: @myFamily.ShowAddress()</p>
+
+<h4>Adults:</h4>
+<ol>
+    @foreach (Adult adult in myFamily.Adults)
+    {
+        <li>@adult.FirstName @adult.LastName</li>
+    }
+
+</ol>
+
+@code {
+
+    [Parameter]
+    public string familyId { get; set; }
+
+    private Family myFamily;
+
+    protected override async Task OnInitializedAsync()
+    {
+        myFamily = FamilyServiceImpl.GetFamilyById(familyId);
+    }
+
+}

@@ -63,5 +63,15 @@ namespace h1.Data.Impl
             families.Remove(families.Find(x => x.Id == id));
             persistence.WriteList(families);
         }
+
+        public Family GetFamilyById(int id)
+        {
+            return families.Find(x => x.Id == id);
+        }
+
+        public Family GetFamilyById(string id)
+        {
+            return families.Find(x => x.Id == Int32.Parse(id));
+        }
     }
 }

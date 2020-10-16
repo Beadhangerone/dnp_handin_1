@@ -9,5 +9,7 @@ namespace h1.Data
         List<Family> GetFamilies();
         void RemoveFamily(int id);
 
+        Family GetFamilyById(int id);
+        Family GetFamilyById(string id);
     }
 }
