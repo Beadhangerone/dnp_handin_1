@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models {
 public class Family {
-    
-    //public int Id { get; set; }
+    [Required]
+    public int Id { get; set; }
     [Required]
     public string StreetName { get; set; }
     [Required]

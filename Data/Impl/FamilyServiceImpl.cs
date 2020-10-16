@@ -13,7 +13,6 @@ namespace h1.Data.Impl
 
         public FamilyServiceImpl()
         {
-            Console.WriteLine("hello!");
             persistence = new JSONPersistenceService(familiesPath);
             families = persistence.ReadList<Family>();
             if (families.Count == 0)
@@ -27,6 +26,7 @@ namespace h1.Data.Impl
         {
             Family f1 = new Family()
             {
+                Id = 5,
                 StreetName = "The Fuck Street",
                 HouseNumber = 4
             };
@@ -55,8 +55,13 @@ namespace h1.Data.Impl
         }
         
         public void CreateFamily()
-        {   
-            
+        {
+        }
+
+        public void RemoveFamily(int id)
+        {
+            families.Remove(families.Find(x => x.Id == id));
+            persistence.WriteList(families);
         }
     }
 }

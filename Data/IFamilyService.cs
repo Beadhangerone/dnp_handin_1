@@ -7,6 +7,7 @@ namespace h1.Data
     {
         void CreateFamily();
         List<Family> GetFamilies();
+        void RemoveFamily(int id);
 
     }
 }

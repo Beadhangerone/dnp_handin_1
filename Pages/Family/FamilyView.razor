@@ -8,7 +8,11 @@
 <h3>FamilyView</h3>
 @foreach (Family family in FamilyServiceImpl.GetFamilies())
 {
-    <div>@family.ShowAddress()</div>
+    <div style="border:1px solid gainsboro">
+        @family.ShowAddress()
+        <a href="/family/@family.Id/edit">Edit</a>
+        <a href="/family/@family.Id/delete">Delete</a>
+    </div>
 }
 
 @code {
