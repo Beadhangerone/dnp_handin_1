@@ -10,19 +10,19 @@ namespace h1.Data.Impl
 {
     public class UserServiceImpl : IUserService
     {
-        private IPersistenceService persistence = new JSONPersistenceService();
+        private IPersistenceService persistence;
         private List<User> users = new List<User>();
-        private readonly string users_path = "users.json";
+        private readonly string usersPath = "users.json";
 
         public UserServiceImpl()
         {
             // TODO Fix double call
+            persistence = new JSONPersistenceService(usersPath);
             DBSync();
         }
 
         private async void DBSync()
         {
-            await persistence.Init(users_path);
             users = persistence.ReadList<User>();
             if (users.Count == 0)
             {

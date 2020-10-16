@@ -1,0 +1,16 @@
+@page "/FamilyView"
+@using h1.Data.Impl
+@using global::Models
+@using h1.Data
+
+@inject IFamilyService FamilyServiceImpl
+
+<h3>FamilyView</h3>
+@foreach (Family family in FamilyServiceImpl.GetFamilies())
+{
+    <div>@family.ShowAddress()</div>
+}
+
+@code {
+    
+}

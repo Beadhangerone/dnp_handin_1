@@ -8,15 +8,16 @@ namespace h1.Data.Impl
 {
     public class JSONPersistenceService : IPersistenceService
     {
-        private string Path { get; set; } 
-        public async Task Init(string path)
+        private string Path { get; set; }
+
+        public JSONPersistenceService(string path)
         {
             Path = path;
             if (!File.Exists(Path))
             {
                 using (FileStream fs = File.Create(Path))
                 {
-                    await JsonSerializer.SerializeAsync(fs, new List<String>());
+                    JsonSerializer.SerializeAsync(fs, new List<String>());
                 }
             }
         }

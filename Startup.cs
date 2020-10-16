@@ -34,6 +34,7 @@ namespace h1
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IUserService, UserServiceImpl>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            services.AddScoped<IFamilyService, FamilyServiceImpl>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

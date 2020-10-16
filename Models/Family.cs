@@ -17,6 +17,25 @@ public class Family {
         Adults = new List<Adult>();     
     }
 
+    public string ShowAddress()
+    {
+        return $"{StreetName}, {HouseNumber}";
+    }
+
+    public void AddAdult(Adult adult)
+    {
+        Adults.Add(adult);
+    }
+
+    public void AddChild(Child child)
+    {
+        Children.Add(child);
+    }
+
+    public void AddPet(Pet pet)
+    {
+        Pets.Add(pet);
+    }
 }
 
 
