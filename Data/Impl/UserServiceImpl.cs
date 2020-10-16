@@ -10,6 +10,7 @@ namespace h1.Data.Impl
 {
     public class UserServiceImpl : IUserService
     {
+        private IPersistenceService persistence = new JSONPersistenceService();
         private List<User> users = new List<User>();
         private readonly string users_path = "users.json";
 
@@ -21,58 +22,14 @@ namespace h1.Data.Impl
 
         private async void DBSync()
         {
-            initFile(users_path);
-            users = readJSONToList<User>(users_path);
-            
+            await persistence.Init(users_path);
+            users = persistence.ReadList<User>();
             if (users.Count == 0)
             {
                 fillUsers();
-                await writeListToJSON(users_path, users);
+                await persistence.WriteList(users);
             }
         }
-
-        private async Task initFile(string path)
-        {
-            if (!File.Exists(path))
-            {
-                using (FileStream fs = File.Create(path))
-                {
-                    await JsonSerializer.SerializeAsync(fs, new List<String>());
-                }
-            }
-        }
-
-        private List<T> readJSONToList<T>(string path)
-        {
-            if (File.Exists(path))
-            {
-                List<T> items = new List<T>();
-                using (StreamReader r = new StreamReader(path))
-                {
-                    string json = r.ReadToEnd();
-                    items = JsonSerializer.Deserialize<List<T>>(json);
-                    return items;
-                }
-            }
-
-            throw new Exception("File " + path + " not found!");
-        }
-
-        private async Task writeListToJSON<T>(string path, List<T> list)
-        {
-            if (File.Exists(path))
-            {
-                using (FileStream fs = File.Create(path))
-                {
-                    await JsonSerializer.SerializeAsync(fs, list);
-                }
-            }
-            else
-            {
-                throw new Exception("file not found!");
-            }
-        }
-
 
         private void fillUsers()
         {
