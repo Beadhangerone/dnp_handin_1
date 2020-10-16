@@ -37,12 +37,32 @@ namespace h1.Data.Impl
                 FirstName = "Mike",
                 HairColor = "Blue",
                 Height = 180,
-                Id = 1,
+                Id = 0,
                 JobTitle = Adult.JobTitles.Captain.ToString(),
                 LastName = "Brownie",
                 Sex = "Male",
                 Weight = 69.420f
             });
+            f1.AddChild(new Child()
+            {
+                Age = 31,
+                EyeColor = "Brown",
+                FirstName = "Mike",
+                HairColor = "Blue",
+                Height = 180,
+                Id = 1,
+                LastName = "Brownie",
+                Sex = "Male",
+                Weight = 69.420f
+            });
+            f1.AddPet(new Pet()
+            {
+                Name = "Boris",
+                Age = 12,
+                Species = "Cat",
+                Id = 1
+            });
+            
             families = new[]
             {
                 f1
@@ -72,6 +92,27 @@ namespace h1.Data.Impl
         public Family GetFamilyById(string id)
         {
             return families.Find(x => x.Id == Int32.Parse(id));
+        }
+
+        public Adult GetAdultById(string id)
+        {
+            int adultId = Int32.Parse(id);
+            return families[adultId].Adults.Find(x => x.Id == Int32.Parse(id));
+        }
+        
+        public Child GetChildById(string id)
+        {
+            return families[Int32.Parse(id)].Children.Find(x => x.Id == Int32.Parse(id));
+        }
+        
+        public Pet GetPetById(string id)
+        {
+            return families[Int32.Parse(id)].Pets.Find(x => x.Id == Int32.Parse(id));
+        }
+
+        public void saveData()
+        {
+            persistence.WriteList(families);
         }
     }
 }

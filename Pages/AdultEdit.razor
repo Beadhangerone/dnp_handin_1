@@ -1,6 +1,39 @@
-﻿@page "/AdultEdit"
-<h3>AdultEdit</h3>
+﻿@page "/adult/{adultId}/edit"
+@using h1.Data
+@using h1.Models
+@using global::Models
+@inject NavigationManager NavigationManager
+@inject IFamilyService FamilyServiceImpl
+
+<EditForm Model="@adultId"> 
+    <InputSelect @bind-Value="myAdult.JobTitle"> 
+        @foreach (Enum item in Enum.GetValues(typeof(JobTitles)))
+        {
+            <option value="@item">@item.ToString()</option>
+        }
+         
+    </InputSelect>
+    <button @onclick='Save'>Update</button>
+</EditForm>
+
+
+
 
 @code {
-    
+
+    [Parameter]
+    public string adultId { get; set; }
+
+    private Adult myAdult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        myAdult = FamilyServiceImpl.GetAdultById(adultId);
+    }
+
+    public async Task Save()
+    {
+        myAdult.Update(myAdult);
+        FamilyServiceImpl.saveData();
+    }
 }

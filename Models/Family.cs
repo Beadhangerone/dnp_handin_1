@@ -15,6 +15,8 @@ public class Family {
 
     public Family() {
         Adults = new List<Adult>();     
+        Children = new List<Child>();
+        Pets = new List<Pet>();
     }
 
     public string ShowAddress()

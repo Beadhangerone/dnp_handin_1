@@ -12,10 +12,33 @@
 <ol>
     @foreach (Adult adult in myFamily.Adults)
     {
-        <li>@adult.FirstName @adult.LastName</li>
+        <li>
+            @adult.FirstName @adult.LastName
+            <a href="/adult/@adult.Id/edit">Edit</a>
+            <a href="/adult/@adult.Id/delete">Delete</a>
+        </li>                            
     }
 
 </ol>
+
+<h4>Children:</h4>
+<ol>
+    @foreach (Child child in myFamily.Children)
+    {
+        <li>@child.FirstName @child.LastName</li>
+    }
+
+</ol>
+
+<h4>Pets:</h4>
+<ol>
+    @foreach (Pet pet in myFamily.Pets)
+    {
+        <li>@pet.Name</li>
+    }
+
+</ol>
+
 
 @code {
 

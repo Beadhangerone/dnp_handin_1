@@ -11,5 +11,10 @@ namespace h1.Data
 
         Family GetFamilyById(int id);
         Family GetFamilyById(string id);
+        Adult GetAdultById(string id);
+        Child GetChildById(string id);
+        Pet GetPetById(string id);
+
+        void saveData();
     }
 }
