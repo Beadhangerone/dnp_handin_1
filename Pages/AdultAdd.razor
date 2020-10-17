@@ -1,0 +1,82 @@
+﻿@page "/family/{familyId}/add"
+@using global::Models
+@using h1.Data
+@using h1.Data.Impl
+@using h1.Models
+@inject NavigationManager NavigationManager
+@inject IFamilyService FamilyServiceImpl
+<h3>AdultAdd</h3>
+
+<EditForm Model="@familyId">
+<InputText  @bind-Value="firstName"/>
+<br/><br/>
+<InputText  @bind-Value="lastName"/>
+<br/><br/>
+<InputText  @bind-Value="hairColor"/>
+<br/><br/>
+<InputText  @bind-Value="eyeColor"/>
+<br/><br/>
+
+<InputSelect @bind-Value="sex">
+    <option value="male">male</option>
+    <option value="female">female</option>
+</InputSelect>
+<br/><br/>
+<InputNumber @bind-Value="age"/>
+<br/><br/>
+<InputNumber @bind-Value="height"/>
+<br/><br/>
+<InputNumber @bind-Value="weight"/>
+<br/><br/>
+<InputSelect @bind-Value="job">
+    @foreach (Enum item in Enum.GetValues(typeof(JobTitles)))
+    {
+        <option value="@item">@item.ToString()</option>
+    }
+</InputSelect>
+<br/><br/>
+<button @onclick="addAdult"></button>
+
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public string familyId { get; set; }
+
+    private string firstName;
+    private string lastName;
+    private string hairColor;
+    private string eyeColor;
+    private string sex;
+    private float weight;
+    private int age;
+    private int height;
+    private string job;
+
+    private Family myFamily;
+
+    protected override async Task OnInitializedAsync()
+    {
+        myFamily = FamilyServiceImpl.GetFamilyById(familyId);
+    }
+
+    public async Task addAdult()
+    {
+        myFamily.Adults.Add(new Adult()
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            HairColor = hairColor,
+            EyeColor = eyeColor,
+            Sex = sex,
+            Weight = weight,
+            Age = age,
+            Height = height,
+            JobTitle = job
+        });
+        NavigationManager.NavigateTo($"family/{familyId}/edit");
+    }
+    
+}

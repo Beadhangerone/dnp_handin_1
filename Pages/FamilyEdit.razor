@@ -8,7 +8,10 @@
 <p>id: @myFamily.Id</p>
 <p>Address: @myFamily.ShowAddress()</p>
 
-<h4>Adults:</h4>
+<h4>Adults:</h4> 
+
+<button @onclick='AddAdult'>Add</button>
+
 <ol>
     @foreach (Adult adult in myFamily.Adults)
     {
@@ -36,7 +39,6 @@
     {
         <li>@pet.Name</li>
     }
-
 </ol>
 
 
@@ -50,6 +52,11 @@
     protected override async Task OnInitializedAsync()
     {
         myFamily = FamilyServiceImpl.GetFamilyById(familyId);
+    }
+
+    public async Task AddAdult()
+    {
+        NavigationManager.NavigateTo($"family/{familyId}/add");
     }
 
 }

@@ -1,11 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Models {
-public class Person {
-    
+public class Person
+{ 
     public int Id { get; set; }
     [NotNull]
     public string FirstName { get; set; }
