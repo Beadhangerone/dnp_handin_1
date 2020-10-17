@@ -76,6 +76,7 @@ Job <InputSelect @bind-Value="job">
             Height = height,
             JobTitle = job
         });
+        FamilyServiceImpl.SaveData();
         NavigationManager.NavigateTo($"family/{familyId}/edit");
     }
     
