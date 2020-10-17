@@ -5,16 +5,29 @@
 @inject NavigationManager NavigationManager
 @inject IFamilyService FamilyServiceImpl
 
-<EditForm Model="@adultId"> 
-    <InputSelect @bind-Value="myAdult.JobTitle"> 
+<EditForm Model="@adultId">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputSelect @bind-Value="myAdult.JobTitle">
         @foreach (Enum item in Enum.GetValues(typeof(JobTitles)))
         {
             <option value="@item">@item.ToString()</option>
         }
-         
     </InputSelect>
+
+    First Name: <InputText @bind-Value="myAdult.FirstName" />
+    
+    <br/><br/>
+
+    Last Name: <InputText @bind-Value="myAdult.LastName" />
+        
+    <br/><br/>
+
     <button @onclick='Save'>Update</button>
+
 </EditForm>
+
 
 
 
@@ -28,6 +41,8 @@
     public string adultId { get; set; }
 
     private Adult myAdult;
+
+    private int values = 100;
 
     protected override async Task OnInitializedAsync()
     {
