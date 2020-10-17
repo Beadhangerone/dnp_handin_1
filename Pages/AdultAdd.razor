@@ -8,34 +8,34 @@
 <h3>AdultAdd</h3>
 
 <EditForm Model="@familyId">
-<InputText  @bind-Value="firstName"/>
+First name <InputText  @bind-Value="firstName"/>
 <br/><br/>
-<InputText  @bind-Value="lastName"/>
+Last name <InputText  @bind-Value="lastName"/>
 <br/><br/>
-<InputText  @bind-Value="hairColor"/>
+Hair color <InputText  @bind-Value="hairColor"/>
 <br/><br/>
-<InputText  @bind-Value="eyeColor"/>
+Eye color<InputText  @bind-Value="eyeColor"/>
 <br/><br/>
 
-<InputSelect @bind-Value="sex">
+Gender <InputSelect @bind-Value="sex">
     <option value="male">male</option>
     <option value="female">female</option>
 </InputSelect>
 <br/><br/>
-<InputNumber @bind-Value="age"/>
+Age <InputNumber @bind-Value="age"/>
 <br/><br/>
-<InputNumber @bind-Value="height"/>
+Height <InputNumber @bind-Value="height"/>
 <br/><br/>
-<InputNumber @bind-Value="weight"/>
+Wight <InputNumber @bind-Value="weight"/>
 <br/><br/>
-<InputSelect @bind-Value="job">
+Job <InputSelect @bind-Value="job">
     @foreach (Enum item in Enum.GetValues(typeof(JobTitles)))
     {
         <option value="@item">@item.ToString()</option>
     }
 </InputSelect>
 <br/><br/>
-<button @onclick="addAdult"></button>
+<button @onclick="addAdult">Add</button>
 
 </EditForm>
 
