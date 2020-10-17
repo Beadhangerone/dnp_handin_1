@@ -64,7 +64,7 @@ Job <InputSelect @bind-Value="job">
 
     public async Task addAdult()
     {
-        myFamily.Adults.Add(new Adult()
+        myFamily.AddAdult(new Adult()
         {
             FirstName = firstName,
             LastName = lastName,
@@ -74,7 +74,7 @@ Job <InputSelect @bind-Value="job">
             Weight = weight,
             Age = age,
             Height = height,
-            JobTitle = job
+            JobTitle = job,
         });
         FamilyServiceImpl.SaveData();
         NavigationManager.NavigateTo($"family/{familyId}/edit");

@@ -48,7 +48,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        myAdult = FamilyServiceImpl.GetAdultById(adultId);
+        myAdult = FamilyServiceImpl.GetAdultById(familyId, adultId);
     }
 
     public async Task Save()

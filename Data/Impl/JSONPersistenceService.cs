@@ -20,6 +20,10 @@ namespace h1.Data.Impl
                     JsonSerializer.SerializeAsync(fs, new List<String>());
                 }
             }
+            else
+            {
+                
+            }
         }
 
         public async Task WriteList<T>(List<T> list)
@@ -51,6 +55,15 @@ namespace h1.Data.Impl
             }
 
             throw new Exception("File " + Path + " not found!");
+        }
+
+        private int GetNextId()
+        {
+            using (StreamReader r = new StreamReader(Path))
+            {
+                string json = r.ReadToEnd();
+                return JsonSerializer.Deserialize<List<object>>(json).Count;
+            }
         }
     }
 }

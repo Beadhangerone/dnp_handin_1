@@ -26,7 +26,6 @@ namespace h1.Data.Impl
         {
             Family f1 = new Family()
             {
-                Id = 5,
                 StreetName = "The Fuck Street",
                 HouseNumber = 4
             };
@@ -37,7 +36,6 @@ namespace h1.Data.Impl
                 FirstName = "Mike",
                 HairColor = "Blue",
                 Height = 180,
-                Id = 0,
                 JobTitle = Adult.JobTitles.Captain.ToString(),
                 LastName = "Brownie",
                 Sex = "Male",
@@ -50,7 +48,6 @@ namespace h1.Data.Impl
                 FirstName = "Mike",
                 HairColor = "Blue",
                 Height = 180,
-                Id = 1,
                 LastName = "Brownie",
                 Sex = "Male",
                 Weight = 69.420f
@@ -60,13 +57,16 @@ namespace h1.Data.Impl
                 Name = "Boris",
                 Age = 12,
                 Species = "Cat",
-                Id = 1
             });
             
-            families = new[]
-            {
-                f1
-            }.ToList();
+            AddFamily(f1);
+        }
+
+        public void AddFamily(Family family)
+        {
+            family.Id = families.Any() ? families.Max(thisFamily => thisFamily.Id) + 1 : 0;
+            families.Add(family);
+            SaveData();
         }
 
         public List<Family> GetFamilies()
@@ -74,16 +74,12 @@ namespace h1.Data.Impl
             return families;
         }
         
-        public void CreateFamily()
-        {
-        }
 
         public void RemoveFamily(int id)
         {
             families.Remove(families.Find(x => x.Id == id));
             SaveData();
         }
-
         public Family GetFamilyById(int id)
         {
             return families.Find(x => x.Id == id);
@@ -91,23 +87,26 @@ namespace h1.Data.Impl
 
         public Family GetFamilyById(string id)
         {
-            return families.Find(x => x.Id == Int32.Parse(id));
+            int myFamilyId = Int32.Parse(id);
+            return GetFamilyById(myFamilyId);
         }
 
-        public Adult GetAdultById(string id)
+        public Adult GetAdultById(int familyId, int id)
         {
-            int adultId = Int32.Parse(id);
-            return families[adultId].Adults.Find(x => x.Id == Int32.Parse(id));
+            Family myFamily = families.Find(x => x.Id == familyId);
+            if (myFamily != null)
+            {
+                return myFamily.Adults.Find(x => x.Id == id);   
+            }
+
+            return null;
         }
-        
-        public Child GetChildById(string id)
+
+        public Adult GetAdultById(string familyId, string id)
         {
-            return families[Int32.Parse(id)].Children.Find(x => x.Id == Int32.Parse(id));
-        }
-        
-        public Pet GetPetById(string id)
-        {
-            return families[Int32.Parse(id)].Pets.Find(x => x.Id == Int32.Parse(id));
+            int myFamilyId = Int32.Parse(familyId);
+            int myAdultId = Int32.Parse(id);
+            return GetAdultById(myFamilyId, myAdultId);
         }
 
         public void SaveData()
