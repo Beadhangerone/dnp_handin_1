@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -37,6 +38,12 @@ public class Family {
     public void AddPet(Pet pet)
     {
         Pets.Add(pet);
+    }
+    
+    public void RemoveAdult(string id)
+    {
+        int adultId = Int32.Parse(id);
+        Adults.Remove(Adults[adultId]);
     }
 }
 
