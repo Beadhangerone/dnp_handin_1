@@ -15,6 +15,6 @@ namespace h1.Data
         Child GetChildById(string id);
         Pet GetPetById(string id);
 
-        void saveData();
+        void SaveData();
     }
 }

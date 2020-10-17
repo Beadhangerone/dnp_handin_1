@@ -1,4 +1,4 @@
-﻿@page "/adult/{adultId}/edit"
+﻿@page "/family/{familyId}/adult/{adultId}/edit"
 @using h1.Data
 @using h1.Models
 @using global::Models
@@ -22,6 +22,9 @@
 @code {
 
     [Parameter]
+    public string familyId { get; set; }
+
+    [Parameter]
     public string adultId { get; set; }
 
     private Adult myAdult;
@@ -34,6 +37,7 @@
     public async Task Save()
     {
         myAdult.Update(myAdult);
-        FamilyServiceImpl.saveData();
+        FamilyServiceImpl.SaveData();
+        NavigationManager.NavigateTo($"/family/{familyId}/edit");
     }
 }

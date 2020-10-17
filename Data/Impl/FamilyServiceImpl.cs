@@ -81,7 +81,7 @@ namespace h1.Data.Impl
         public void RemoveFamily(int id)
         {
             families.Remove(families.Find(x => x.Id == id));
-            persistence.WriteList(families);
+            SaveData();
         }
 
         public Family GetFamilyById(int id)
@@ -110,7 +110,7 @@ namespace h1.Data.Impl
             return families[Int32.Parse(id)].Pets.Find(x => x.Id == Int32.Parse(id));
         }
 
-        public void saveData()
+        public void SaveData()
         {
             persistence.WriteList(families);
         }
