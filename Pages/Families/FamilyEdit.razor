@@ -8,7 +8,7 @@
 <p>id: @myFamily.Id</p>
 <p>Address: @myFamily.ShowAddress()</p>
 
-<h4>Adults:</h4> 
+<h4>Adults:</h4>
 
 <button @onclick='AddAdult'>Add</button>
 
@@ -39,7 +39,11 @@
 <ol>
     @foreach (Pet pet in myFamily.Pets)
     {
-        <li>@pet.Name</li>
+        <li>
+            @pet.Name
+            <a href="/family/@familyId/pet/@pet.Id/edit">Edit</a>
+            <a href="/family/@familyId/pet/@pet.Id/delete">Delete</a>
+        </li>
     }
 </ol>
 

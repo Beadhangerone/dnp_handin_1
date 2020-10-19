@@ -49,7 +49,13 @@ public class Family {
     public void RemoveAdult(string id)
     {
         int adultId = Int32.Parse(id);
-        Adults.Remove(Adults[adultId]);
+        Adults.Remove(Adults.Find(x=>x.Id == adultId));
+    }
+    
+    public void RemovePet(string id)
+    {
+        int petId = Int32.Parse(id);
+        Pets.Remove(Pets.Find(x=>x.Id == petId));
     }
     
 }
