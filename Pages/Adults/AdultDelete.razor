@@ -22,7 +22,7 @@ Are you sure you want to delete the adult with id @adultId?
     public async Task DeleteAdult()
     {
         FamilyServiceImpl.GetFamilyById(familyId).RemoveAdult(adultId);
-        FamilyServiceImpl.SaveData();
+        await FamilyServiceImpl.SaveData();
         NavigationManager.NavigateTo($"family/{familyId}/edit");
     }
 

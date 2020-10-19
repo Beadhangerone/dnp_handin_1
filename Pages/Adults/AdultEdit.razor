@@ -54,7 +54,7 @@
     public async Task Save()
     {
         myAdult.Update(myAdult);
-        FamilyServiceImpl.SaveData();
+        await FamilyServiceImpl.SaveData();
         NavigationManager.NavigateTo($"/family/{familyId}/edit");
     }
 }

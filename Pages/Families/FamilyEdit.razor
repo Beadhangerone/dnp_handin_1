@@ -25,6 +25,7 @@
 </ol>
 
 <h4>Children:</h4>
+
 <ol>
     @foreach (Child child in myFamily.Children)
     {
@@ -34,6 +35,7 @@
 </ol>
 
 <h4>Pets:</h4>
+<button @onclick='AddFamilyPet'>Add</button>
 <ol>
     @foreach (Pet pet in myFamily.Pets)
     {
@@ -54,9 +56,14 @@
         myFamily = FamilyServiceImpl.GetFamilyById(familyId);
     }
 
+    public async Task AddFamilyPet()
+    {
+        NavigationManager.NavigateTo($"/family/{familyId}/pets/add");
+    }
+
     public async Task AddAdult()
     {
-        NavigationManager.NavigateTo($"family/{familyId}/add");
+        NavigationManager.NavigateTo($"/family/{familyId}/adults/add");
     }
 
 }
