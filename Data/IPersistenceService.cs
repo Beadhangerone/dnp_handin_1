@@ -5,9 +5,11 @@ namespace h1.Data
 {
     public interface IPersistenceService
     {
+        string Path { get; }
+
+        Task CreateFile();
         // Task Init(string tableName);
         Task WriteList<T>(List<T> list);
-        List<T> ReadList<T>();
-        
+        Task<List<T>> ReadList<T>();
     }
 }

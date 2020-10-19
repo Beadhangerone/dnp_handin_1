@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using h1.Helpers;
 using h1.Models;
 
 namespace h1.Data.Impl
@@ -16,24 +17,28 @@ namespace h1.Data.Impl
 
         public UserServiceImpl()
         {
-            // TODO Fix double call
+            ActionLog.Log("Data.UserServiceImpl Invoke");
             persistence = new JSONPersistenceService(usersPath);
-            DBSync();
         }
 
-        private async void DBSync()
+        public async Task DBSync()
         {
-            users = persistence.ReadList<User>();
+            // Check if the file "families.json" is created
+            if (!File.Exists(persistence.Path))
+                await persistence.CreateFile();
+            
+            users = await persistence.ReadList<User>();
+            
             if (users.Count == 0)
             {
-                fillUsers();
+                users = new List<User>(GetPlaceholderUsers());
                 await persistence.WriteList(users);
             }
         }
 
-        private void fillUsers()
+        private List<User> GetPlaceholderUsers()
         {
-            users = new[]
+            return new[]
             {
                 new User
                 {

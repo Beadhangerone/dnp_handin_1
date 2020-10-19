@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+using h1.Helpers;
 using Models;
 
 namespace h1.Data.Impl
@@ -9,20 +13,35 @@ namespace h1.Data.Impl
     {
         private IPersistenceService persistence;
         private readonly string familiesPath = "families.json";
-        private List<Family> families;
+        private List<Family> _families = new List<Family>();
 
         public FamilyServiceImpl()
         {
+            ActionLog.Log("Data.FamilyServiceImpl Invoke");
             persistence = new JSONPersistenceService(familiesPath);
-            families = persistence.ReadList<Family>();
-            if (families.Count == 0)
-            {
-                FillFamilies();
-                persistence.WriteList(families);
-            }
         }
 
-        public void FillFamilies()
+        public async Task DBSync()
+        {
+            ActionLog.Log($"/Database/{familiesPath} DBSync()");
+            
+            // Check if the file "families.json" is created
+            if (!File.Exists(persistence.Path))
+            {
+                await persistence.CreateFile();
+                
+                await FillFamilies();
+
+                // Save changes
+                await SaveData();
+            }
+
+            // Get the data from the JSON file
+            _families = await persistence.ReadList<Family>();
+        }
+
+
+        private async Task FillFamilies()
         {
             Family f1 = new Family()
             {
@@ -59,30 +78,32 @@ namespace h1.Data.Impl
                 Species = "Cat",
             });
             
-            AddFamily(f1);
+            await AddFamily(f1);
         }
 
-        public void AddFamily(Family family)
+        public async Task AddFamily(Family family)
         {
-            family.Id = families.Any() ? families.Max(thisFamily => thisFamily.Id) + 1 : 0;
-            families.Add(family);
-            SaveData();
+            family.Id = _families.Any() ? _families.Max(thisFamily => thisFamily.Id) + 1 : 0;
+            _families.Add(family);
+            await SaveData();
+            ActionLog.Log("/Database/families.json modified (create)");
         }
 
         public List<Family> GetFamilies()
         {
-            return families;
+            return _families;
         }
         
 
-        public void RemoveFamily(int id)
+        public async Task RemoveFamily(int id)
         {
-            families.Remove(families.Find(x => x.Id == id));
-            SaveData();
+            _families.Remove(_families.Find(x => x.Id == id));
+            await SaveData();
+            ActionLog.Log("/Database/families.json modified (delete)");
         }
         public Family GetFamilyById(int id)
         {
-            return families.Find(x => x.Id == id);
+            return _families.Find(x => x.Id == id);
         }
 
         public Family GetFamilyById(string id)
@@ -93,7 +114,7 @@ namespace h1.Data.Impl
 
         public Adult GetAdultById(int familyId, int id)
         {
-            Family myFamily = families.Find(x => x.Id == familyId);
+            Family myFamily = _families.Find(x => x.Id == familyId);
             if (myFamily != null)
             {
                 return myFamily.Adults.Find(x => x.Id == id);   
@@ -109,9 +130,9 @@ namespace h1.Data.Impl
             return GetAdultById(myFamilyId, myAdultId);
         }
 
-        public void SaveData()
+        public async Task SaveData()
         {
-            persistence.WriteList(families);
+            await persistence.WriteList(_families);
         }
     }
 }

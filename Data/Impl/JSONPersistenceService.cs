@@ -3,58 +3,52 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using h1.Helpers;
 
 namespace h1.Data.Impl
 {
     public class JSONPersistenceService : IPersistenceService
     {
-        private string Path { get; set; }
+        public string Path { get; }
+        private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions();
 
         public JSONPersistenceService(string path)
         {
             Path = path;
-            if (!File.Exists(Path))
-            {
-                using (FileStream fs = File.Create(Path))
-                {
-                    JsonSerializer.SerializeAsync(fs, new List<String>());
-                }
-            }
-            else
-            {
-                
-            }
+        }
+
+        public async Task CreateFile()
+        {
+            await using var fs = File.Create(Path);
+            await JsonSerializer.SerializeAsync(fs, new List<string>());
+            fs.Close();
+            ActionLog.Log($"/Database/{Path} file created");
         }
 
         public async Task WriteList<T>(List<T> list)
         {
-            if (File.Exists(Path))
-            {
-                using (FileStream fs = File.Create(Path))
-                {
-                    await JsonSerializer.SerializeAsync(fs, list);
-                }
-            }
-            else
-            {
-                throw new Exception("file not found!");
-            }
+            if (!File.Exists(Path))
+                throw new FileNotFoundException($"File {Path} not found");
+
+            await using StreamWriter streamWriter = File.CreateText(Path);
+            await streamWriter.WriteAsync(JsonSerializer.Serialize(list));
+            streamWriter.Close();
+            
+            ActionLog.Log($"/Database/{Path} accessed");
         }
 
-        public List<T> ReadList<T>()
+        public async Task<List<T>> ReadList<T>()
         {
-            if (File.Exists(Path))
-            {
-                List<T> items = new List<T>();
-                using (StreamReader r = new StreamReader(Path))
-                {
-                    string json = r.ReadToEnd();
-                    items = JsonSerializer.Deserialize<List<T>>(json);
-                    return items;
-                }
-            }
-
-            throw new Exception("File " + Path + " not found!");
+            if (!File.Exists(Path))
+                throw new FileNotFoundException($"File {Path} not found");
+            
+            await using FileStream sourceStream = File.Open(Path, FileMode.Open);
+            // result = new byte[sourceStream.Length];
+            // await sourceStream.ReadAsync(result, 0, (int)sourceStream.Length);
+            List<T> items = await JsonSerializer.DeserializeAsync<List<T>>(sourceStream, _jsonSerializerOptions);
+            sourceStream.Close();
+            
+            return items;
         }
 
         private int GetNextId()
