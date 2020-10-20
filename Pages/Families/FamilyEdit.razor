@@ -26,6 +26,8 @@
 
 <h4>Children:</h4>
 
+<button @onclick='AddChild'>Add</button>
+
 <ol>
     @foreach (Child child in myFamily.Children)
     {
@@ -69,5 +71,9 @@
     {
         NavigationManager.NavigateTo($"/family/{familyId}/adults/add");
     }
-
+    
+    public async Task AddChild()
+    {
+        NavigationManager.NavigateTo($"/family/{familyId}/children/add");
+    }
 }

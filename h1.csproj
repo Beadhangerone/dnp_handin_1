@@ -4,4 +4,9 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\Chilldren\ChildInterests" />
+      <Folder Include="Pages\Chilldren\Pets" />
+    </ItemGroup>
+
 </Project>

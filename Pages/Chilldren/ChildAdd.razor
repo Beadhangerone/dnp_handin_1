@@ -1,0 +1,170 @@
+﻿@page "/family/{familyId}/children/add"
+@using h1.Data.Impl
+@using global::Models
+@using h1.Data
+@using h1.Models
+@inject NavigationManager NavigationManager
+@inject IFamilyService FamilyServiceImpl
+<h3>ChildAdd</h3>
+
+<EditForm Model="@familyId">
+First name <InputText  @bind-Value="firstName"/>
+<br/><br/>
+Last name <InputText  @bind-Value="lastName"/>
+<br/><br/>
+Hair color <InputText  @bind-Value="hairColor"/>
+<br/><br/>
+Eye color<InputText  @bind-Value="eyeColor"/>
+<br/><br/>
+
+Gender <InputSelect @bind-Value="sex">
+    <option value="male">male</option>
+    <option value="female">female</option>
+</InputSelect>
+<br/><br/>
+Age <InputNumber @bind-Value="age"/>
+<br/><br/>
+Height <InputNumber @bind-Value="height"/>
+<br/><br/>
+Wight <InputNumber @bind-Value="weight"/>
+<br/><br/>
+
+<h3>Interests:</h3>
+    <InputSelect @bind-Value="interestSelected">
+        @foreach (ChildInterests item in Enum.GetValues(typeof(ChildInterests)))
+        {
+            <option value="@item">@item.ToString()</option>
+        }
+    </InputSelect>
+    <br/><br/>
+<button @onclick="AddChildInterest">AddInterest</button>
+<br/><br/>
+<ol>
+    @foreach (ChildInterests interest in interests)
+    {
+        <li>
+            @interest.ToString()
+            <a style=" cursor:pointer; color:blue; text-decoration:underline;" @onclick="@(e => DeleteInterest(interest))" >Delete</a>
+        </li>
+    }
+</ol>
+<br/><br/>
+
+<h3>Pets:</h3>
+Species:
+    <InputSelect @bind-Value="species">
+        @foreach (Enum item in Enum.GetValues(typeof(Pet.PetSpecies)))
+        {
+            <option value="@item">@item.ToString()</option>
+        }
+    </InputSelect>
+    <br/><br/>
+    Name: <InputText @bind-Value="name"/>
+    <br/><br/>
+    Age: <InputNumber @bind-Value="agePet"/>
+    <br/><br/>
+<button @onclick="AddChildPet">AddPet</button>
+<br/><br/>
+<ol>
+    @foreach (Pet pet in pets)
+    {
+        <li>
+            @pet.Name
+            <a style=" cursor:pointer; color:blue; text-decoration:underline;" @onclick="@(e => deletePet(pet))" >Delete</a>
+        </li>
+    }
+</ol>
+<br/><br/>
+<button @onclick="addChild">AddChild</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public string familyId { get; set; }
+
+    private string firstName;
+    private string lastName;
+    private string hairColor;
+    private string eyeColor;
+    private string sex;
+    private float weight;
+    private int age;
+    private int height;
+    private List<Pet> pets;
+    private List<ChildInterests> interests;
+    private String interestSelected;
+    
+    private string species;
+    private string name;
+    private int agePet;
+    
+    
+    private Family myFamily;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        myFamily = FamilyServiceImpl.GetFamilyById(familyId);
+        pets = new List<Pet>();
+        interests = new List<ChildInterests>();
+        interestSelected = "";
+    }
+
+    public async Task addChild()
+    {
+        myFamily.AddChild(new Child()
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            HairColor = hairColor,
+            EyeColor = eyeColor,
+            Sex = sex,
+            Weight = weight,
+            Age = age,
+            Height = height,
+            Pets = pets,
+            ChildInterests = interests
+        });
+        await FamilyServiceImpl.SaveData();
+        NavigationManager.NavigateTo($"family/{familyId}/edit");
+    }
+
+    public async Task AddChildInterest()
+    {
+        if (interestSelected != "")
+        {
+            ChildInterests selectedInterest = (ChildInterests) System.Enum.Parse(typeof(ChildInterests), interestSelected);
+            if (!interests.Contains(selectedInterest))
+            {
+                interests.Add(selectedInterest);   
+            }
+            interestSelected = "";
+        }
+    }
+
+    public async Task DeleteInterest(ChildInterests interestToDel)
+    {
+        interests.Remove(interestToDel);
+    }
+
+    public async Task AddChildPet()
+    {
+        pets.Add(new Pet()
+        {
+            Age = agePet,
+            Name = name,
+            Species = species
+        });
+        species = "";
+        age = 0;
+        name = "";
+    }
+
+    public async Task deletePet(Pet pet)
+    {
+        pets.Remove(pet);
+       
+    }
+
+
+}

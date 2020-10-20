@@ -133,6 +133,17 @@ namespace h1.Data.Impl
 
             return null;
         }
+        
+        public Child GetChildById(int familyId, int id)
+        {
+            Family myFamily = _families.Find(x => x.Id == familyId);
+            if (myFamily != null)
+            {
+                return myFamily.Children.Find(x => x.Id == id);   
+            }
+
+            return null;
+        }
 
         public Adult GetAdultById(string familyId, string id)
         {
@@ -146,6 +157,13 @@ namespace h1.Data.Impl
             int myFamilyId = Int32.Parse(familyId);
             int myPetId = Int32.Parse(id);
             return GetFamilyPetById(myFamilyId, myPetId);
+        }
+
+        public Child GetChildById(string familyId, string id)
+        {
+            int myFamilyId = Int32.Parse(familyId);
+            int myChildId = Int32.Parse(id);
+            return GetChildById(myFamilyId, myChildId);
         }
 
         public async Task SaveData()
