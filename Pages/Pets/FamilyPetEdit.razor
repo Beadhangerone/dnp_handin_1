@@ -1,0 +1,56 @@
+﻿@page "/family/{familyId}/pet/{petId}/edit"
+@using h1.Data
+@using h1.Data.Impl
+@using global::Models
+
+@inject NavigationManager NavigationManager
+@inject IFamilyService FamilyServiceImpl
+
+<EditForm Model="@petId">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    Species:
+    <InputSelect @bind-Value="myPet.Species">
+        @foreach (Enum item in Enum.GetValues(typeof(Pet.PetSpecies)))
+        {
+            <option value="@item">@item.ToString()</option>
+        }
+    </InputSelect>
+    
+       <br/><br/>
+        Name: <InputText @bind-Value="myPet.Name"/>
+        <br/><br/>
+        Age: <InputNumber @bind-Value="myPet.Age"/>
+        <br/><br/>
+
+    <button @onclick='Save'>Update</button>
+
+</EditForm>
+
+
+
+
+
+@code {
+
+    [Parameter]
+    public string familyId { get; set; }
+
+    [Parameter]
+    public string petId { get; set; }
+
+    private Pet myPet;
+
+    protected override async Task OnInitializedAsync()
+    {
+        myPet = FamilyServiceImpl.GetFamilyPetById(familyId, petId);
+    }
+
+    public async Task Save()
+    {
+        myPet.setPet(myPet);
+        await FamilyServiceImpl.SaveData();
+        NavigationManager.NavigateTo($"/family/{familyId}/edit");
+    }
+}

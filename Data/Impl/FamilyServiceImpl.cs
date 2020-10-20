@@ -123,11 +123,29 @@ namespace h1.Data.Impl
             return null;
         }
 
+        public Pet GetFamilyPetById(int familyId, int id)
+        {
+            Family myFamily = _families.Find(x => x.Id == familyId);
+            if (myFamily != null)
+            {
+                return myFamily.Pets.Find(x => x.Id == id);   
+            }
+
+            return null;
+        }
+
         public Adult GetAdultById(string familyId, string id)
         {
             int myFamilyId = Int32.Parse(familyId);
             int myAdultId = Int32.Parse(id);
             return GetAdultById(myFamilyId, myAdultId);
+        }
+
+        public Pet GetFamilyPetById(string familyId, string id)
+        {
+            int myFamilyId = Int32.Parse(familyId);
+            int myPetId = Int32.Parse(id);
+            return GetFamilyPetById(myFamilyId, myPetId);
         }
 
         public async Task SaveData()

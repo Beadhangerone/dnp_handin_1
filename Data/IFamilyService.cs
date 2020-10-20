@@ -14,6 +14,8 @@ namespace h1.Data
         Family GetFamilyById(string id);
         Adult GetAdultById(int familyId, int id);
         Adult GetAdultById(string familyId, string id);
+        Pet GetFamilyPetById(string familyId, string id);
+        Pet GetFamilyPetById(int familyId, int id);
         Task SaveData();
     }
 }
