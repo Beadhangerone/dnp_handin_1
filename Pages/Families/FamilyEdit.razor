@@ -21,7 +21,6 @@
             <a href="/family/@familyId/adult/@adult.Id/delete">Delete</a>
         </li>
     }
-
 </ol>
 
 <h4>Children:</h4>
@@ -31,9 +30,12 @@
 <ol>
     @foreach (Child child in myFamily.Children)
     {
-        <li>@child.FirstName @child.LastName</li>
+        <li>
+            @child.FirstName @child.LastName
+            <a href="/family/@familyId/children/@child.Id/edit">Edit</a>
+            <a href="/family/@familyId/children/@child.Id/delete">Delete</a>
+        </li>
     }
-
 </ol>
 
 <h4>Pets:</h4>
