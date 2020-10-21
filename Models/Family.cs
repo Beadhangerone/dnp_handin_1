@@ -59,7 +59,7 @@ public class Family {
 
             Children.Select(c => numOfPets += c.Pets.Count);
 
-            return Children.Count;
+            return numOfPets;
         }
 
         public void AddAdult(Adult adult)
