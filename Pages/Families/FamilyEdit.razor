@@ -5,8 +5,18 @@
 @inject IFamilyService FamilyServiceImpl
 
 <h3>FamilyEdit</h3>
+<button @onclick='Save'>Save</button>
 <p>id: @myFamily.Id</p>
-<p>Address: @myFamily.ShowAddress()</p>
+<EditForm Model="myFamily">
+    <p>
+        StreetName:
+        <InputText @bind-Value="myFamily.StreetName"/>
+    </p>
+    <p>
+        HouseNumber:
+        <InputNumber @bind-Value="myFamily.HouseNumber"/>
+    </p>
+</EditForm>
 
 <h4>Adults:</h4>
 
@@ -73,9 +83,16 @@
     {
         NavigationManager.NavigateTo($"/family/{familyId}/adults/add");
     }
-    
+
     public async Task AddChild()
     {
         NavigationManager.NavigateTo($"/family/{familyId}/children/add");
     }
+
+    public async void Save()
+    {
+        await FamilyServiceImpl.SaveData();
+        NavigationManager.NavigateTo("/FamilyView");
+    }
+
 }

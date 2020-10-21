@@ -7,6 +7,7 @@ namespace h1.Data
     public interface IFamilyService
     {
         Task DBSync();
+        Family CreateFamily();
         Task AddFamily(Family family);
         List<Family> GetFamilies();
         Task RemoveFamily(int id);

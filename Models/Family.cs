@@ -63,6 +63,10 @@ public class Family {
         int childID = Int32.Parse(id);
         Children.Remove(Children.Find(x => x.Id == childID));
     }
-    
+
+    public bool IsEmpty()
+    {
+        return !(Adults.Any() || Children.Any() || Pets.Any() || !String.IsNullOrEmpty(StreetName));
+    }
 }
 }

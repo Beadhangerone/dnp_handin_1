@@ -40,6 +40,18 @@ namespace h1.Data.Impl
             _families = await persistence.ReadList<Family>();
         }
 
+        public Family CreateFamily()
+        {
+            Family emptyFamily = _families.Find(x => x.IsEmpty());
+            if (emptyFamily == null)
+            {
+                emptyFamily = new Family();
+                AddFamily(emptyFamily);
+            }
+            emptyFamily.HouseNumber = 0;
+            return emptyFamily;
+        }
+
 
         private async Task FillFamilies()
         {
