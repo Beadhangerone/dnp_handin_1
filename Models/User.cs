@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace h1.Models
 {
-    public class User : IdentityUser
+    public class User
     {
-        override
+        public string Id
+        { get; set; } = Guid.NewGuid().ToString();
         public string UserName { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
-        public int SecurityLevel { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

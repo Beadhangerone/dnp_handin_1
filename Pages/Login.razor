@@ -1,0 +1,75 @@
+@page "/sign-in"
+@namespace LoginComponent
+@using LoginExample.Authentication
+@using h1.Data
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject IUserService UserServiceImpl
+
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="form-group">
+            <label>Email address:</label>
+            <input type="email" placeholder="Email address" @bind-value="username" />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="Password" @bind-value="password" />
+        </div>
+        <div style="color:red">@errorMessage</div>
+
+        <a href="" @onclick="PerformLogin">
+            Login
+        </a>
+    </NotAuthorized>
+    <Authorized>
+        <a href="" @onclick="PerformLogout">
+            Log out
+        </a>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    private string username;
+    private string password;
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UserServiceImpl.DBSync();
+    }
+
+    public async Task PerformLogin()
+    {
+        errorMessage = "";
+        try
+        {
+            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).ValidateLogin(username, password);
+            username = "";
+            password = "";
+        }
+        catch (Exception e)
+        {
+            Console.Write($"logine xception: {e.Message}");
+            errorMessage = e.Message;
+        }
+    }
+
+    public async Task PerformLogout()
+    {
+        errorMessage = "";
+        username = "";
+        password = "";
+        try
+        {
+            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).Logout();
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Console.Write($"logine xception: {e.ToString()}");
+        }
+    }
+
+}

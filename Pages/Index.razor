@@ -6,7 +6,7 @@ Welcome to your new app.
 
 <AuthorizeView>
     <Authorized>
-        <p>Welcome, @context.User.Identity.Name</p>
+        <p>Hi, @context.User.FindFirst(claim => claim.Type.Equals("FirstName"))!</p>
     </Authorized>
     <NotAuthorized>
         <p>You are not signed!</p>

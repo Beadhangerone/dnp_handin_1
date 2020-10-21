@@ -1,15 +1,15 @@
 @page "/FamilyView"
-@using h1.Data.Impl
 @using global::Models
 @using h1.Data
 
 @inject IJSRuntime jsRuntime
 @inject IFamilyService FamilyServiceImpl
 @inject NavigationManager NavigationManager
+@inject IUserService UserService
 
 <h3>FamilyView</h3>
 <button @onclick='AddFamily'>Add</button>
-@foreach (Family family in FamilyServiceImpl.GetFamilies())
+@foreach (Family family in families)
 {
     if (!family.IsEmpty())
     {
@@ -21,17 +21,25 @@
     }
 }
 
+
 @code {
+    List<Family> families = new List<Family>();
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine(1);
         await FamilyServiceImpl.DBSync();
+        Console.WriteLine(2);
+        string json = await jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "currentUser");
+        Console.WriteLine(3);
+        families = FamilyServiceImpl.GetFamiliesCreatedById(json);
     }
 
-    private void AddFamily()
+    private async void AddFamily()
     {
-        Family emptyFamily = FamilyServiceImpl.CreateFamily();
+        string json = await jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "currentUser");
+
+        Family emptyFamily = FamilyServiceImpl.CreateFamily(json);
         NavigationManager.NavigateTo($"/family/{emptyFamily.Id}/edit");
     }
-
 }

@@ -1,0 +1,63 @@
+@page "/sign-up"
+@namespace LoginComponent
+@using LoginExample.Authentication
+@using h1.Data
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject IUserService UserServiceImpl
+
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="form-group">
+            <label>First name:</label>
+            <input type="text" placeholder="First name" @bind-value="firstName" />
+        </div>
+        <div class="form-group">
+            <label>Last name:</label>
+            <input type="text" placeholder="Last name" @bind-value="lastName" />
+        </div>
+        <div class="form-group">
+            <label>Email address:</label>
+            <input type="email" placeholder="Email address" @bind-value="email" />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="Password" @bind-value="password" />
+        </div>
+        <div style="color:red">@errorMessage</div>
+
+        <a href="" @onclick="PerformRegister">
+            Register
+        </a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string email;
+    private string firstName;
+    private string lastName;
+    private string password;
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UserServiceImpl.DBSync();
+    }
+
+    public async Task PerformRegister()
+    {
+        errorMessage = "";
+        try
+        {
+            await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).RegisterUser(email, firstName, lastName, password);
+            email = "";
+            password = "";
+        }
+        catch (Exception e)
+        {
+            Console.Write($"logine xception: {e.Message}");
+            errorMessage = e.Message;
+        }
+    }
+}
