@@ -57,7 +57,8 @@ public class Family {
             int numOfPets = 0;
             numOfPets += Pets.Count;
 
-            Children.Select(c => numOfPets += c.Pets.Count);
+            foreach (Child child in Children)
+                numOfPets += child.Pets.Count;
 
             return numOfPets;
         }
