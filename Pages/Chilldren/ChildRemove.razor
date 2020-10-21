@@ -1,0 +1,32 @@
+﻿@page "/family/{familyId}/children/{childId}/delete"
+@using h1.Data
+@using global::Models
+@inject NavigationManager NavigationManager
+@inject IFamilyService FamilyServiceImpl
+<h3>AdultDelete</h3>
+
+Are you sure you want to delete the adult with id @childId from family @familyId?
+
+<button @onclick='DeleteChild'>Yes</button>
+<button @onclick='Cancel'>No</button>
+
+@code {
+    [Parameter]
+    public string familyId { get; set; }
+
+    [Parameter]
+    public string childId { get; set; }
+
+    public async Task DeleteChild()
+    {
+        FamilyServiceImpl.GetFamilyById(familyId).RemoveChild(childId);
+        await FamilyServiceImpl.SaveData();
+        NavigationManager.NavigateTo($"family/{familyId}/edit");
+    }
+
+    public async Task Cancel()
+    {
+        NavigationManager.NavigateTo($"family/{familyId}/edit");
+    }
+    
+}

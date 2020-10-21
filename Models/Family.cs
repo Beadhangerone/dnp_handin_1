@@ -57,8 +57,12 @@ public class Family {
         int petId = Int32.Parse(id);
         Pets.Remove(Pets.Find(x=>x.Id == petId));
     }
+
+    public void RemoveChild(string id)
+    {
+        int childID = Int32.Parse(id);
+        Children.Remove(Children.Find(x => x.Id == childID));
+    }
     
 }
-
-
 }
