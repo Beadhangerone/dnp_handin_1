@@ -37,7 +37,32 @@ public class Family {
         return $"{StreetName}, {HouseNumber}";
     }
 
-    public void AddAdult(Adult adult)
+        public string GetFamilyName()
+        {
+            return Adults.Count != 0 ? Adults[0].LastName : "";
+        }
+
+        public int GetNumberOfAdults()
+        {
+            return Adults.Count;
+        }
+
+        public int GetNumberOfChildren()
+        {
+            return Children.Count;
+        }
+
+        public int GetNumberOfPets()
+        {
+            int numOfPets = 0;
+            numOfPets += Pets.Count;
+
+            Children.Select(c => numOfPets += c.Pets.Count);
+
+            return Children.Count;
+        }
+
+        public void AddAdult(Adult adult)
     { 
         adult.Id = Adults.Any() ? adult.Id = Adults.Max(thisAdult => thisAdult.Id) + 1 : 0;
         Adults.Add(adult);

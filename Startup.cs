@@ -38,6 +38,7 @@ namespace h1
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IFamilyService, FamilyServiceImpl>();
             services.AddScoped<IUserService, UserServiceImpl>();
+            services.AddScoped<IFilterService, FilterService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
         }
 
