@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using h1.Helpers;
-using h1.Models;
+using h1.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace h1.Data.Impl
 {
@@ -36,15 +37,22 @@ namespace h1.Data.Impl
             }
         }
 
+        public async Task<IdentityResult> CreateAsync(string email, string password)
+        {
+            ActionLog.Log("A new user was created");
+            //_context.Users.Add(new User { Email = email, Password = password });
+
+            return IdentityResult.Success;
+        }
+
         private List<User> GetPlaceholderUsers()
         {
             return new[]
             {
                 new User
                 {
-                    UserName = "Troels",
-                    Password = "1234",
-                    SecurityLevel = 3
+                    Email = "hoho@hoho.com",
+                    Password = "1234"
                 }
             }.ToList();
         }

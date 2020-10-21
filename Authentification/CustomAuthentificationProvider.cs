@@ -49,11 +49,11 @@ namespace h1.Authentication
             ClaimsIdentity identity = new ClaimsIdentity();
             try
             {
-                User user = userService.ValidateUser(username, password);
-                identity = SetupClaimsForUser(user);
-                string serialisedData = JsonSerializer.Serialize(user);
-                jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
-                cachedUser = user;
+                //User user = userService.ValidateUser(username, password);
+                //identity = SetupClaimsForUser(user);
+                //string serialisedData = JsonSerializer.Serialize(user);
+                //jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
+                //cachedUser = user;
             }
             catch (Exception e)
             {

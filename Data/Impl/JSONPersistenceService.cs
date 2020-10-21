@@ -43,8 +43,7 @@ namespace h1.Data.Impl
                 throw new FileNotFoundException($"File {Path} not found");
             
             await using FileStream sourceStream = File.Open(Path, FileMode.Open);
-            // result = new byte[sourceStream.Length];
-            // await sourceStream.ReadAsync(result, 0, (int)sourceStream.Length);
+            
             List<T> items = await JsonSerializer.DeserializeAsync<List<T>>(sourceStream, _jsonSerializerOptions);
             sourceStream.Close();
             
