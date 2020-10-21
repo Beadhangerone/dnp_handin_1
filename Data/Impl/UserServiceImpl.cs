@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using h1.Helpers;
-using h1.Entities;
-using Microsoft.AspNetCore.Identity;
+using h1.Models;
 
 namespace h1.Data.Impl
 {
@@ -37,12 +35,25 @@ namespace h1.Data.Impl
             }
         }
 
-        public async Task<IdentityResult> CreateAsync(string email, string password)
+        public async Task CreateAsync(string email, string firstName, string lastName, string password)
         {
             ActionLog.Log("A new user was created");
-            //_context.Users.Add(new User { Email = email, Password = password });
+            try
+            {
+                var isUnique = CheckIfUniqueEmail(email);
 
-            return IdentityResult.Success;
+                if (isUnique)
+                {
+                    users.Add(new User { Email = email, FirstName = firstName, LastName = lastName, UserName = email, Password = password });
+                }
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Null mens");
+            }
+            
+            await SaveData();
+            //_context.Users.Add(new User { Email = email, Password = password });
         }
 
         private List<User> GetPlaceholderUsers()
@@ -51,6 +62,9 @@ namespace h1.Data.Impl
             {
                 new User
                 {
+                    FirstName = "John",
+                    LastName = "Doe",
+                    UserName = "hoho@hoho.com",
                     Email = "hoho@hoho.com",
                     Password = "1234"
                 }
@@ -59,7 +73,35 @@ namespace h1.Data.Impl
 
         public User ValidateUser(string userName, string password)
         {
-            throw new System.NotImplementedException();
+            User first = users.FirstOrDefault(user => user.UserName.Equals(userName));
+            if (first == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            if (!first.Password.Equals(password))
+            {
+                throw new Exception("Incorrect password");
+            }
+
+            return first;
+        }
+
+        private bool CheckIfUniqueEmail(string email)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                if (users[i].Email.Equals(email))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public async Task SaveData()
+        {
+            await persistence.WriteList(users);
         }
     }
 }

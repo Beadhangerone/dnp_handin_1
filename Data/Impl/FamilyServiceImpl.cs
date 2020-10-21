@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using h1.Helpers;
+using h1.Models;
 using Models;
 
 namespace h1.Data.Impl
@@ -40,21 +41,21 @@ namespace h1.Data.Impl
             _families = await persistence.ReadList<Family>();
         }
 
-        public Family CreateFamily()
+        public Family CreateFamily(string json)
         {
+            Guid createdById = GetUserIdFromJson(json);
             Family emptyFamily = _families.Find(x => x.IsEmpty());
             if (emptyFamily == null)
             {
-                emptyFamily = new Family();
+                emptyFamily = new Family(createdById);
                 AddFamily(emptyFamily);
             }
             emptyFamily.HouseNumber = 0;
             return emptyFamily;
         }
 
-
         private async Task FillFamilies()
-        {
+        {/*
             Family f1 = new Family()
             {
                 StreetName = "The Fuck Street",
@@ -90,7 +91,7 @@ namespace h1.Data.Impl
                 Species = "Cat",
             });
             
-            await AddFamily(f1);
+            await AddFamily(f1);*/
         }
 
         public async Task AddFamily(Family family)
@@ -104,6 +105,11 @@ namespace h1.Data.Impl
         public List<Family> GetFamilies()
         {
             return _families;
+        }
+
+        public List<Family> GetFamiliesCreatedById(string json)
+        {
+            return _families.Where(f => f.CreatedById == GetUserIdFromJson(json)).ToList();
         }
         
 
@@ -176,6 +182,11 @@ namespace h1.Data.Impl
             int myFamilyId = Int32.Parse(familyId);
             int myChildId = Int32.Parse(id);
             return GetChildById(myFamilyId, myChildId);
+        }
+
+        private Guid GetUserIdFromJson(string json)
+        {
+            return Guid.Parse(JsonSerializer.Deserialize<User>(json).Id);
         }
 
         public async Task SaveData()

@@ -8,6 +8,8 @@ public class Family {
     [Required]
     public int Id { get; set; }
     [Required]
+    public Guid CreatedById { get; set; }
+    [Required]
     public string StreetName { get; set; }
     [Required]
     public int HouseNumber{ get; set; }
@@ -15,14 +17,21 @@ public class Family {
     public List<Child> Children{ get; set; }
     public List<Pet> Pets{ get; set; }
 
-    public Family() {
-        Adults = new List<Adult>();     
+    public Family()
+    {
+        Adults = new List<Adult>();
         Children = new List<Child>();
         Pets = new List<Pet>();
     }
 
-    
-    
+        public Family(Guid createdById)
+    {
+        CreatedById = createdById;
+        Adults = new List<Adult>();
+        Children = new List<Child>();
+        Pets = new List<Pet>();
+    }
+
     public string ShowAddress()
     {
         return $"{StreetName}, {HouseNumber}";

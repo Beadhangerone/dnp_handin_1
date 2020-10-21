@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Models;
@@ -7,7 +8,7 @@ namespace h1.Data
     public interface IFamilyService
     {
         Task DBSync();
-        Family CreateFamily();
+        Family CreateFamily(string json);
         Task AddFamily(Family family);
         List<Family> GetFamilies();
         Task RemoveFamily(int id);
@@ -19,6 +20,7 @@ namespace h1.Data
         Pet GetFamilyPetById(int familyId, int id);
         Child GetChildById(string familyId, string id);
         Child GetChildById(int familyId, int id);
+        List<Family> GetFamiliesCreatedById(string json);
         Task SaveData();
     }
 }

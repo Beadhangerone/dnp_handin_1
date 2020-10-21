@@ -1,15 +1,46 @@
-﻿@inherits LayoutComponentBase
+﻿@using LoginExample.Authentication
+@using h1.Data
+
+@inherits LayoutComponentBase
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
 
 <div class="sidebar">
-    <NavMenu/>
+    <NavMenu />
 </div>
 
 <div class="main">
-    <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-    </div>
+    <AuthorizeView>
+        <Authorized>
+            <div class="top-row px-4">
+                <button @onclick="PerformLogout">Sign out</button>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <div class="top-row px-4">
+                <NavLink href="sign-in">Sign in</NavLink>
+                <NavLink href="sign-up">Sign up</NavLink>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
 
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+@code {
+    public async Task PerformLogout()
+    {
+        try
+        {
+            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).Logout();
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Console.Write($"logine xception: {e.ToString()}");
+        }
+    }
+}
