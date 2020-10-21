@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Models;
@@ -7,22 +8,24 @@ namespace h1.Data.Impl
 {
     public class FilterService : IFilterService
     {
-        private readonly IFamilyService _familyService;
+        private readonly IFamilyService familyService;
 
-        public FilterService(IFamilyService familyService)
+        public FilterService(IFamilyService _familyService)
         {
-            _familyService = familyService;
+            familyService = _familyService;
         }
         
         public List<Person> findPersonByName(string searchString)
-        {
-            List<Family> families = _familyService.GetFamilies(); 
+        { 
+            List<Family> families = familyService.GetFamilies();
+            Console.WriteLine(families.Count);
             List<Person> persons = new List<Person>();
+            searchString = searchString.ToLower();
 
             foreach (Family family in families)
             {
-                persons.AddRange(family.Adults.Where(a => $"{a.FirstName} {a.LastName}".Contains(searchString) || $"{a.LastName} {a.FirstName}".Contains(searchString)));
-                persons.AddRange(family.Children.Where(a => $"{a.FirstName} {a.LastName}".Contains(searchString) || $"{a.LastName} {a.FirstName}".Contains(searchString)));
+                persons.AddRange(family.Adults.Where(a => $"{a.FirstName} {a.LastName}".ToLower().Contains(searchString) || $"{a.LastName} {a.FirstName}".ToLower().Contains(searchString)).ToList());
+                persons.AddRange(family.Children.Where(a => $"{a.FirstName} {a.LastName}".ToLower().Contains(searchString) || $"{a.LastName} {a.FirstName}".ToLower().Contains(searchString)).ToList());
             }
 
             return persons;
