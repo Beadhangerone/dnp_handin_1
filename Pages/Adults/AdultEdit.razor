@@ -25,13 +25,37 @@
     Last Name: <InputText @bind-Value="myAdult.LastName" />
         
     <br/><br/>
+    
+    Hair color <InputText  @bind-Value="myAdult.HairColor"/>
+    
+    <br/><br/>
+    
+    Eye color <InputText  @bind-Value="myAdult.EyeColor"/>
+    
+    <br/><br/>
+    
+    Gender <InputSelect @bind-Value="myAdult.Sex">
+        <option value="male">male</option>
+        <option value="female">female</option>
+    </InputSelect>
+    
+    <br/><br/>
+    
+    Age <InputNumber @bind-Value="myAdult.Age"/>
+    
+    <br/><br/>
+    
+    Height <InputNumber @bind-Value="myAdult.Height"/>
+    
+    <br/><br/>
+    
+    Wight <InputNumber @bind-Value="myAdult.Weight"/>
+    
+    <br/><br/>
 
     <button @onclick='Save'>Update</button>
 
 </EditForm>
-
-
-
 
 
 @code {
@@ -43,8 +67,6 @@
     public string adultId { get; set; }
 
     private Adult myAdult;
-
-    private int values = 100;
 
     protected override async Task OnInitializedAsync()
     {
