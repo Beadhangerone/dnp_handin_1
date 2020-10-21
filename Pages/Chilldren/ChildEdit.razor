@@ -1,0 +1,147 @@
+﻿@page "/family/{familyId}/children/{childId}/edit"
+@using global::Models
+@using h1.Data
+@using h1.Models
+@inject NavigationManager NavigationManager
+@inject IFamilyService FamilyServiceImpl
+<h3>ChildrenEdit</h3>
+
+<EditForm Model="@childId">
+First name <InputText  @bind-Value="myChild.FirstName"/>
+<br/><br/>
+Last name <InputText  @bind-Value="myChild.LastName"/>
+<br/><br/>
+Hair color <InputText  @bind-Value="myChild.HairColor"/>
+<br/><br/>
+Eye color<InputText  @bind-Value="myChild.EyeColor"/>
+<br/><br/>
+
+Gender <InputSelect @bind-Value="myChild.Sex">
+    <option value="male">male</option>
+    <option value="female">female</option>
+</InputSelect>
+<br/><br/>
+Age <InputNumber @bind-Value="myChild.Age"/>
+<br/><br/>
+Height <InputNumber @bind-Value="myChild.Height"/>
+<br/><br/>
+Wight <InputNumber @bind-Value="myChild.Weight"/>
+<br/><br/>
+
+<h3>Interests:</h3>
+    <InputSelect @bind-Value="interestSelected">
+        @foreach (ChildInterests item in Enum.GetValues(typeof(ChildInterests)))
+        {
+            <option value="@item">@item.ToString()</option>
+        }
+    </InputSelect>
+    <br/><br/>
+<button @onclick="AddChildInterest">AddInterest</button>
+<br/><br/>
+<ol>
+    @foreach (ChildInterests interest in myChild.ChildInterests)
+    {
+        <li>
+            @interest.ToString()
+            <a style=" cursor:pointer; color:blue; text-decoration:underline;" @onclick="@(e => DeleteInterest(interest))" >Delete</a>
+        </li>
+    }
+</ol>
+<br/><br/>
+
+
+Add animal
+Job <InputSelect @bind-Value="species">
+    @foreach (Enum item in Enum.GetValues(typeof(Pet.PetSpecies)))
+    {
+        <option value="@item">@item.ToString()</option>
+    }
+</InputSelect>
+<br/><br/>
+Name: <InputText @bind-Value="name"/>
+    <br/><br/>
+    Age: <InputNumber @bind-Value="age"/>
+    <br/><br/>
+<ol>
+    @foreach (Pet pet in myChild.Pets)
+    {
+        <li>
+            @pet.Name
+            <a style=" cursor:pointer; color:blue; text-decoration:underline;" @onclick="@(e => deletePet(pet))" >Delete</a>
+        </li>
+    }
+</ol>
+ <br/><br/>
+<button @onclick="AddChildPet">AddPet</button>
+<br/><br/>
+<button @onclick="Save">Save</button>
+
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public string familyId { get; set; }
+
+    [Parameter]
+    public string childId { get; set; }
+
+    private Child myChild;
+
+    private string species;
+    private int age;
+    private string name;
+    
+    private String interestSelected;
+
+    protected override async Task OnInitializedAsync()
+    {
+        myChild = FamilyServiceImpl.GetChildById(familyId, childId);
+        interestSelected = "";
+    }
+
+    public async Task Save()
+    {
+        myChild.Update(myChild);
+        await FamilyServiceImpl.SaveData();
+        NavigationManager.NavigateTo($"/family/{familyId}/edit");
+    }
+    
+    public async Task AddChildInterest()
+    {
+        if (!String.IsNullOrEmpty(interestSelected))
+        {
+            ChildInterests selectedInterest = (ChildInterests) System.Enum.Parse(typeof(ChildInterests), interestSelected);
+            if (!myChild.ChildInterests.Contains(selectedInterest))
+            {
+                myChild.ChildInterests.Add(selectedInterest);   
+            }
+            interestSelected = "";
+        }
+    }
+
+    public async Task DeleteInterest(ChildInterests interestToDel)
+    {
+        myChild.ChildInterests.Remove(interestToDel);
+    }
+
+    public async Task AddChildPet()
+    {
+        myChild.Pets.Add(new Pet()
+        {
+            Age = age,
+            Name = name,
+            Species = species
+        });
+        species = "";
+        age = 0;
+        name = "";
+    }
+
+    public async Task deletePet(Pet pet)
+    {
+        myChild.Pets.Remove(pet);
+       
+    }
+
+}

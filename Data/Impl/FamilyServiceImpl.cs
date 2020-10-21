@@ -31,7 +31,7 @@ namespace h1.Data.Impl
             {
                 await persistence.CreateFile();
                 
-                await FillFamilies();
+                //await FillFamilies();
 
                 // Save changes
                 await SaveData();
