@@ -1,0 +1,38 @@
+@page "/Person/Search"
+@using global::Models
+@using h1.Data
+@using h1.Data.Impl
+@inject IFilterService FilterService;
+@inject IFamilyService FamilyService;
+<h3>Person Search</h3>
+Name: <input @bind='name' type="text">
+<button @onclick='Search'>Search</button>
+@foreach (Person pers in results)
+{
+    <div style="border:1px solid gray; margin-bottom: 5px;">
+        Name: @pers.FirstName @pers.LastName
+        Age: @pers.Age
+        Sex: @pers.Sex
+        Height: @pers.Height
+        Weight: @pers.Weight
+        Hair: @pers.HairColor
+    </div>
+}
+
+@code {
+    private String name;
+    private List<Person> results = new List<Person>();
+
+    private void Search()
+    {
+        results = FilterService.findPersonByName(name);
+        Console.WriteLine(results.Count);
+        name = "";
+    }
+    
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await FamilyService.DBSync();
+    }
+}
